@@ -1,57 +1,71 @@
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class PhoneBook {
-
+    public static int id = 0;
     public static void main(String[] args) {
-        String[][] book = new String [1][1];
+        String[][] book = new String [0][2];
         Scanner scanner = new Scanner(System.in);
-        String operation = "";
-        int i = 0;
+        String selection = "";
         String name = "";
         String number = "";
         boolean isCorrectName;
         boolean isCorrectNumber;
-        while (!(operation=="s")) {
-            System.out.println("Select operation");
+        while (!("3".equals(selection))) {
+            System.out.println("*****************************************************************************");
+            System.out.println("Выберите действие:");
             System.out.println("1. Добавить адресат");
             System.out.println("2. Просмотреть адресную книгу");
             System.out.println("3. Выход");
-            operation = scanner.nextLine() ;
-            switch (operation) {
-                case "1":
+            System.out.println("*****************************************************************************");
+            selection = scanner.nextLine() ;
+            switch (selection) {
+                case "1": {
+                    book = arrayLengthChange(book, book.length+1);
                     System.out.print("Введите Имя, Фамилия, Отчество (через пробел): ");
-                    name = scanner.nextLine(); //Считывает строку из System.in
                     isCorrectName = false;
                     while (!isCorrectName) {
+                        name = scanner.nextLine();
                         isCorrectName = checkName(name);
                         if (!isCorrectName) {
                             System.out.println("Введите корректное имя!");
-                        } //else book[0][i] = name;
+                        } else {
+                        }
                     }
                     System.out.print("Введите номер телефона по формату X XXX XXX XX XX: ");
-                    number = scanner.nextLine(); //Считывает строку из System.in
                     isCorrectNumber = false;
                     while (!isCorrectNumber) {
+                        number = scanner.nextLine(); 
                         isCorrectNumber = checkPhoneNumber(number);
                         if (!isCorrectNumber) {
                             System.out.println("Введите корректный номер! Номер должен содерзать 11 цифр по формату X XXX XXX XX XX");
+
                         } else {
                             System.out.println("Номер был приведен к требуему формату и записан в базу как: " + formatPhoneNumber(number));
-                            //book[1][i] = formatPhoneNumber(number);
                         }
                     }
                     add(book, name, number);
-                case "s" :
+                    id = id+1;
+                    break;
+                }
+                case "2" : {
+                    list(book);
+                    break;
+                }
+                case "3" :{
                         break;
-                default:
+                }
+                default: {
                     System.out.println("Not correct input");
+                    System.out.println("-------------------------");
                     System.out.println("Select operation");
                     System.out.println("1. Добавить адресат");
                     System.out.println("2. Просмотреть адресную книгу");
                     System.out.println("3. Выход");
-                    operation = scanner.nextLine() ;
+                    selection = scanner.nextLine();
                     break;
-            }
+                }
+              }
             }
         }
 
@@ -63,11 +77,11 @@ public class PhoneBook {
     public static String formatName(String name) {
         return "";
     }
-    private static boolean checkPhoneNumber(String phoneNumber) {
+    public static boolean checkPhoneNumber(String phoneNumber) {
         String clean = phoneNumber.replaceAll("[^0-9]", "");
         return clean.length() == 11;
     }
-    private static String formatPhoneNumber(String phoneNumber) {
+    public static String formatPhoneNumber(String phoneNumber) {
         String clean = phoneNumber.replaceAll("[^0-9]", "");
         String result = "+7" + " " + clean.substring(1, 4) + " " +
                 clean.substring(4, 7) + " " + clean.substring(7, 9) + " " + clean.substring(9);
@@ -76,11 +90,18 @@ public class PhoneBook {
     }
 
     public static void add(String[][] book, String name, String number) {
-
-
+        book[id][0] = name;
+        book[id][1] = number;
     }
 
-    public static void list(String[][] book) {
-        //print phone book
+    public static void list(String[][] tmpbook) {
+            for (int i=0; i<=tmpbook.length-1; i++){
+                System.out.println(tmpbook[i][0]+ " "+tmpbook[i][1]);
+            }
+        }
+    public static String[][] arrayLengthChange(String[][] arr, int newLength) {
+        String[][] arrNew = new String[newLength][2];
+        System.arraycopy(arr, 0, arrNew, 0, arr.length);
+        return arrNew;
     }
 }
